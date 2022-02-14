@@ -37,10 +37,19 @@ public class ServiceRegistrationTest extends TestCase {
 
     public void testServiceRegistration4() {
         ServiceRegistration registration = new ServiceRegistration();
-        registration.registrationService(I3.class, "org.stx.I3Impl");
+        registration.registrationService(I3.class, "org.stx.I2Impl");
         registration.registrationService(I4.class, new I4Impl());
         registration.registrationService(I2.class, new I2Impl());
-        System.out.println(registration.getServices());
+    }
+
+    public void testServiceRegistration5() {
+        ServiceRegistration registration = new ServiceRegistration();
+        registration.registrationService(I3.class, "org.stx.sdsdsdI2Impl");
+    }
+
+    public void testServiceRegistration6() {
+        ServiceRegistration registration = new ServiceRegistration();
+        I1 i1 = registration.getService(null);
     }
 
     public void testUnregisterService() {

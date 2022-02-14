@@ -1,11 +1,16 @@
 package org.stx;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ServiceRegistration {
+    private final static Logger LOGGER = Logger.getLogger(ServiceRegistration.class.getName());
+
     private final Map<Class<?>, Object> services;
 
     public ServiceRegistration() {
@@ -13,6 +18,7 @@ public class ServiceRegistration {
     }
 
     public <T> T getService(Class<T> type) {
+        Objects.requireNonNull(type, "type is not be null");
         return type.cast(services.get(type));
     }
 
@@ -24,7 +30,7 @@ public class ServiceRegistration {
         try {
             services.put(type, tImpl.getDeclaredConstructor().newInstance());
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.WARNING, e.getMessage(), e);
         }
     }
 
@@ -33,15 +39,11 @@ public class ServiceRegistration {
             Class<?> iClass = Class.forName(name);
             services.put(type, type.cast(iClass.getDeclaredConstructor().newInstance()));
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.WARNING, e.getMessage(), e);
         }
     }
 
     public <T> T unregisterService(Class<T> type) {
         return type.cast(services.remove(type));
-    }
-
-    public Map<Class<?>, Object> getServices() {
-        return services;
     }
 }
