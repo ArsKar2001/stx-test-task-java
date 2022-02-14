@@ -1,7 +1,8 @@
 package org.stx;
 
 import junit.framework.TestCase;
-import org.junit.Assert;
+
+import static org.stx.ServiceRegistration.INST;
 
 interface I1 { }
 interface I2 { }
@@ -14,63 +15,55 @@ class I3Impl implements I3 { }
 class I4Impl implements I4 { }
 
 public class ServiceRegistrationTest extends TestCase {
-    public void testServiceRegistration1() {
-        ServiceRegistration registration = new ServiceRegistration();
-        registration.registrationService(I1.class, new I1Impl());
-        I1 i1 = registration.getService(I1.class);
-        Assert.assertNotNull(i1);
+
+    public void testGetServiceNPE() {
+        I1 i1 = INST.getService(null); // NPE
     }
 
-    public void testServiceRegistration2() {
-        ServiceRegistration registration = new ServiceRegistration();
-        registration.registrationService(I2.class, org.stx.I2Impl.class);
-        I2 i2 = registration.getService(I2.class);
-        Assert.assertNotNull(i2);
+    public void testGetService() {
+        INST.registrationService(I1.class, new I1Impl());
+
+        I1 i1 = INST.getService(I1.class);
+        I2 i2 = INST.getService(I2.class);
+
+        assertNotNull(i1);
+        assertNull(i2);
     }
 
-    public void testServiceRegistration3() {
-        ServiceRegistration registration = new ServiceRegistration();
-        registration.registrationService(I3.class, "org.stx.I3Impl");
-        I3 i3 = registration.getService(I3.class);
-        Assert.assertNotNull(i3);
+    public void testRegistrationService1NPE() {
+        I1Impl i1 = null;
+        INST.registrationService(I1.class, i1); // NPE
     }
 
-    public void testServiceRegistration4() {
-        ServiceRegistration registration = new ServiceRegistration();
-        registration.registrationService(I3.class, "org.stx.I2Impl");
-        registration.registrationService(I4.class, new I4Impl());
-        registration.registrationService(I2.class, new I2Impl());
+    public void testRegistrationService1() {
+        INST.registrationService(I1.class, new I1Impl());
     }
 
-    public void testServiceRegistration5() {
-        ServiceRegistration registration = new ServiceRegistration();
-        registration.registrationService(I3.class, "org.stx.sdsdsdI2Impl");
+    public void testRegistrationService2() {
+        INST.registrationService(I2.class, "org.stx.I2Impl");
     }
 
-    public void testServiceRegistration6() {
-        ServiceRegistration registration = new ServiceRegistration();
-        I1 i1 = registration.getService(null);
+    public void testRegistrationService2NPE() {
+        String s = null;
+        INST.registrationService(I1.class, s); // NPE
+    }
+
+    public void testRegistrationService3() {
+        INST.registrationService(I4.class, org.stx.I4Impl.class);
+    }
+
+    public void testUnregisterServiceNPE() {
+        INST.unregisterService(null);
     }
 
     public void testUnregisterService() {
-        ServiceRegistration registration = new ServiceRegistration();
-        registration.registrationService(I1.class, org.stx.I1Impl.class);
-        registration.unregisterService(I1.class);
+        INST.unregisterService(I1.class);
     }
 
-    public void testGetUnregisterService1() {
-        ServiceRegistration registration = new ServiceRegistration();
-        registration.registrationService(I3.class, new I3Impl());
-        registration.unregisterService(I2.class);
+    public void testValues() {
 
-        I2 i2 = registration.getService(I2.class);
-        Assert.assertNull(i2);
     }
 
-    public void testGetUnregisterService2() {
-        ServiceRegistration registration = new ServiceRegistration();
-
-        I3 i3 = registration.getService(I3.class);
-        Assert.assertNull(i3);
+    public void testValueOf() {
     }
 }
