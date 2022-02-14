@@ -17,12 +17,12 @@ public enum ServiceRegistration {
         services = new HashMap<>();
     }
 
-    public  <T> T getService(Class<T> type) {
+    public synchronized <T> T getService(Class<T> type) {
         Objects.requireNonNull(type, "type is not be null");
         return type.cast(services.get(type));
     }
 
-    public <T> void registrationService(Class<T> type, T t) {
+    public synchronized <T> void registrationService(Class<T> type, T t) {
         try {
             Objects.requireNonNull(t);
             services.put(type, t);
@@ -32,7 +32,7 @@ public enum ServiceRegistration {
         }
     }
 
-    public <T> void registrationService(Class<T> type, Class<? extends T> tImpl) {
+    public synchronized <T> void registrationService(Class<T> type, Class<? extends T> tImpl) {
         try {
             services.put(type, tImpl.getDeclaredConstructor().newInstance());
             LOGGER.info("Successfully registered service: " + type.getName());
@@ -41,7 +41,7 @@ public enum ServiceRegistration {
         }
     }
 
-    public <T> void registrationService(Class<T> type, String name) {
+    public synchronized <T> void registrationService(Class<T> type, String name) {
         try {
             Class<?> iClass = Class.forName(name);
             services.put(type, type.cast(iClass.getDeclaredConstructor().newInstance()));
@@ -51,7 +51,7 @@ public enum ServiceRegistration {
         }
     }
 
-    public <T> void unregisterService(Class<T> type) {
+    public synchronized <T> void unregisterService(Class<T> type) {
         try {
             Objects.requireNonNull(type);
             services.remove(type);
