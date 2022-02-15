@@ -59,31 +59,4 @@ public class ServiceRegistrationTest extends TestCase {
     public void testUnregisterService() {
         INST.unregisterService(I1.class);
     }
-
-    public void testValues() {
-
-    }
-
-    public void testMultiThreading() {
-        new Thread(() -> {
-            for (int i = 0; i < 100; i++) {
-                INST.registrationService(I1.class, new I1Impl());
-                I1 i1 = INST.getService(I1.class);
-                INST.unregisterService(I1.class);
-                System.out.println(i1 + " - " + i);
-            }
-        }).start();
-
-        new Thread(() -> {
-            for (int i = 0; i < 100; i++) {
-                INST.registrationService(I1.class, new I1Impl());
-                I1 i1 = INST.getService(I1.class);
-                INST.unregisterService(I1.class);
-                System.out.println(i1 + " - " + i);
-            }
-        }).start();
-    }
-
-    public void testValueOf() {
-    }
 }
