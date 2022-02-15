@@ -53,9 +53,8 @@ public enum ServiceRegistration {
 
     public synchronized <T> void unregisterService(Class<T> type) {
         try {
-            Objects.requireNonNull(type);
             services.remove(type);
-            LOGGER.info("Successfully unregister service: " + type.getName());
+            LOGGER.info("Successfully unregister service: " + type);
         } catch (Exception e) {
             LOGGER.log(Level.WARNING, e.getMessage(), e);
         }
