@@ -2,7 +2,6 @@ package org.stx;
 
 import junit.framework.TestCase;
 
-import static org.stx.ServiceRegistration.INST;
 
 interface I1 { }
 interface I2 { }
@@ -16,15 +15,21 @@ class I4Impl implements I4 { }
 
 public class ServiceRegistrationTest extends TestCase {
 
+    private final ServiceRegistration service;
+
+    public ServiceRegistrationTest() {
+        service = ServiceRegistration.getInstance();
+    }
+
     public void testGetServiceNPE() {
-//        I1 i1 = INST.getService(null); // NPE
+//        I1 i1 = ServiceRegistration.getInstance().getService(null); // NPE
     }
 
     public void testGetService() {
-        INST.registrationService(I1.class, new I1Impl());
+        service.registrationService(I1.class, new I1Impl());
 
-        I1 i1 = INST.getService(I1.class);
-        I2 i2 = INST.getService(I2.class);
+        I1 i1 = service.getService(I1.class);
+        I2 i2 = service.getService(I2.class);
 
         assertNotNull(i1);
         assertNull(i2);
@@ -32,31 +37,31 @@ public class ServiceRegistrationTest extends TestCase {
 
     public void testRegistrationService1NPE() {
         I1Impl i1 = null;
-        INST.registrationService(I1.class, i1); // NPE
+        service.registrationService(I1.class, i1); // NPE
     }
 
     public void testRegistrationService1() {
-        INST.registrationService(I1.class, new I1Impl());
+        service.registrationService(I1.class, new I1Impl());
     }
 
     public void testRegistrationService2() {
-        INST.registrationService(I2.class, "org.stx.I2Impl");
+        service.registrationService(I2.class, "org.stx.I2Impl");
     }
 
     public void testRegistrationService2NPE() {
         String s = null;
-        INST.registrationService(I1.class, s); // NPE
+        service.registrationService(I1.class, s); // NPE
     }
 
     public void testRegistrationService3() {
-        INST.registrationService(I4.class, org.stx.I4Impl.class);
+        service.registrationService(I4.class, org.stx.I4Impl.class);
     }
 
     public void testUnregisterServiceNPE() {
-        INST.unregisterService(null);
+        service.unregisterService(null);
     }
 
     public void testUnregisterService() {
-        INST.unregisterService(I1.class);
+        service.unregisterService(I1.class);
     }
 }
